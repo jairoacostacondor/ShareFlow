@@ -5,27 +5,22 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.shareflow.app.InitialScreen
-import com.shareflow.app.LoginScreen
-import com.shareflow.app.SignUpScreen
-import com.shareflow.app.InicioSesionScreen
+import com.shareflow.app.screens.SplashScreen
+import com.shareflow.app.screens.LoginRegisterScreen
+
 
 @Composable
 fun NavigationGraph(navController: NavHostController = rememberNavController()) {
-    NavHost(navController = navController, startDestination = "initial") {
-        composable("initial") {
-            InitialScreen(navController)
+    NavHost(navController = navController, startDestination = "splash") {
+        composable("splash") {
+            SplashScreen(navController)
         }
-        composable("login") {
-            LoginScreen(navController)
+        composable("loginRegisterScreen") {
+            LoginRegisterScreen(navController)
         }
-        composable("signup") {
-            SignUpScreen(navController)
-        }
-        composable("home/{userName}") { backStackEntry ->
-            val userName = backStackEntry.arguments?.getString("userName") ?: "User"
-            InicioSesionScreen(userName)
-        }
+
+
+
 
     }
 }
