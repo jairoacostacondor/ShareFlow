@@ -26,6 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
@@ -185,7 +192,8 @@ fun LoginScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { /* TODO: Login action */ },
+                onClick = { navController.navigate("home/$email") },
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -362,6 +370,65 @@ fun SignUpScreen(navController: NavHostController) {
                 modifier = Modifier
                     .clickable { navController.navigate("login") }
             )
+        }
+    }
+}
+
+@Composable
+fun InicioSesionScreen(userName: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF5ECE5))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = "Welcome $userName",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF7A6E69)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = { /* Añadir acción */ },
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(Color(0xFF7A6E69), CircleShape),
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(Color(0xFF7A6E69))
+            ) {
+                Text("+", fontSize = 24.sp, color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                repeat(6) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                            .background(Color(0xFFD3C4B7), RoundedCornerShape(16.dp))
+                            .clickable { /* Acción al hacer clic */ },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Opción ${it + 1}", fontSize = 20.sp, color = Color.White)
+                    }
+                }
+            }
         }
     }
 }

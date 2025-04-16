@@ -11,6 +11,14 @@ application {
 
 
 dependencies {
+    // Exposed y MySQL
+    implementation("mysql:mysql-connector-java:8.0.33")
+    implementation("org.jetbrains.exposed:exposed-core:0.41.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.41.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1")
+    implementation("at.favre.lib:bcrypt:0.9.0")
+
+
     implementation("io.ktor:ktor-server-core-jvm:2.3.8")
     implementation("io.ktor:ktor-server-netty-jvm:2.3.8")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.8")

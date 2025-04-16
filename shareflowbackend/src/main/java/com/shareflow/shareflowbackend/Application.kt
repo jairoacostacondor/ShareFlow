@@ -3,8 +3,6 @@ package com.shareflow.shareflowbackend
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -20,9 +18,12 @@ fun main() {
                 ignoreUnknownKeys = true
             })
         }
+
+        // 👉 Aquí conectamos con la base de datos
+        DatabaseFactory.init()
+
         routing {
             userRoutes()
         }
     }.start(wait = true)
 }
-

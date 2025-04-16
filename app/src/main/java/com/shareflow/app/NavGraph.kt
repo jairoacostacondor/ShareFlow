@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.shareflow.app.InitialScreen
 import com.shareflow.app.LoginScreen
 import com.shareflow.app.SignUpScreen
-
+import com.shareflow.app.InicioSesionScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController = rememberNavController()) {
@@ -22,5 +22,10 @@ fun NavigationGraph(navController: NavHostController = rememberNavController()) 
         composable("signup") {
             SignUpScreen(navController)
         }
+        composable("home/{userName}") { backStackEntry ->
+            val userName = backStackEntry.arguments?.getString("userName") ?: "User"
+            InicioSesionScreen(userName)
+        }
+
     }
 }
