@@ -19,21 +19,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.shareflow.app.R
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
-import com.shareflow.app.models.UserLoginRequest
-import com.shareflow.app.network.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.HttpException
-import java.io.IOException
+import com.shareflow.app.models.User
+import com.shareflow.app.network.RetrofitInstance
 
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun RegisterScreen(navController: NavHostController) {
+    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -58,7 +53,7 @@ fun LoginScreen(navController: NavHostController) {
         ) {
             // Título
             Text(
-                text = "Iniciar sesión",
+                text = "Crear cuenta",
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333),
@@ -67,7 +62,30 @@ fun LoginScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Campo Email
+            // Campo Nombre
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                placeholder = { Text(text = "Nombre", color = Color(0xFF9E9E9E)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Transparent),
+                shape = RoundedCornerShape(16.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFFF8F3EE),
+                    unfocusedContainerColor = Color(0xFFF8F3EE),
+                    disabledContainerColor = Color(0xFFF8F3EE),
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    disabledBorderColor = Color.Transparent
+                )
+                ,
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+// Campo Email
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -83,13 +101,14 @@ fun LoginScreen(navController: NavHostController) {
                     focusedBorderColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
                     disabledBorderColor = Color.Transparent
-                ),
+                )
+                ,
                 singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Campo Contraseña
+// Campo Contraseña
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -106,37 +125,40 @@ fun LoginScreen(navController: NavHostController) {
                     focusedBorderColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
                     disabledBorderColor = Color.Transparent
-                ),
+                )
+                ,
                 singleLine = true
             )
 
+
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Botón Acceder
+            // Botón Registrarse
             Button(
                 onClick = {
+                    // Crea el objeto User
+                    val user = User(
+                        nombre = name,
+                        email = email,
+                        contrasena = password
+                    )
+
+                    // Ejecuta la llamada a la API
                     CoroutineScope(Dispatchers.IO).launch {
                         try {
-                            val loginRequest = UserLoginRequest(email = email, contrasena = password)
-                            val response = RetrofitInstance.api.loginUser(loginRequest)
-                            withContext(Dispatchers.Main) {
-                                if (response.isSuccessful) {
-                                    // ✅ Login exitoso
-                                    println("✅ Login exitoso")
-                                    // Aquí puedes navegar a la pantalla principal de la app, por ejemplo:
-                                    navController.navigate("home/$email")
-                                } else {
-                                    // ❌ Login fallido
-                                    println("❌ Login fallido: ${response.errorBody()?.string()}")
-                                }
+                            val response = RetrofitInstance.api.registerUser(user)
+                            if (response.isSuccessful) {
+                                println("✅ Registro exitoso: ${response.body()}")
+                                // Aquí podrías navegar al login o mostrar un mensaje bonito
+                            } else {
+                                println("❌ Error al registrar usuario: ${response.errorBody()?.string()}")
                             }
-                        } catch (e: IOException) {
-                            println("❌ Error de red: ${e.message}")
-                        } catch (e: HttpException) {
-                            println("❌ Error HTTP: ${e.message}")
+                        } catch (e: Exception) {
+                            println("❌ Error en la llamada a la API: ${e.message}")
                         }
                     }
-                },
+                }
+                ,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp),
@@ -146,7 +168,7 @@ fun LoginScreen(navController: NavHostController) {
                 )
             ) {
                 Text(
-                    text = "Acceder",
+                    text = "Registrarse",
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                     fontSize = 18.sp
@@ -155,35 +177,24 @@ fun LoginScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // ¿Olvidaste tu contraseña? y ¿No tienes cuenta?
-            Column(
+            // ¿Ya tienes cuenta?
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "¿Olvidaste tu contraseña?",
+                    text = "¿Ya tienes cuenta? ",
                     fontSize = 16.sp,
-                    color = Color(0xFF333333),
+                    color = Color(0xFF333333)
+                )
+                Text(
+                    text = "Accede",
+                    fontSize = 16.sp,
+                    color = Color(0xFF6A4ADB),
                     modifier = Modifier.clickable {
-                        navController.navigate("forgotPasswordScreen")
+                        navController.navigate("loginScreen")
                     }
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row {
-                    Text(
-                        text = "¿No tienes cuenta? ",
-                        fontSize = 16.sp,
-                        color = Color(0xFF333333)
-                    )
-                    Text(
-                        text = "Regístrate",
-                        fontSize = 16.sp,
-                        color = Color(0xFF6A4ADB),
-                        modifier = Modifier.clickable {
-                            navController.navigate("registerScreen")
-                        }
-                    )
-                }
             }
         }
     }

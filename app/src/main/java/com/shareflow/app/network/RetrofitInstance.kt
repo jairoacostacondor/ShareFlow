@@ -2,6 +2,7 @@ package com.shareflow.app.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.shareflow.app.network.UserApi // <<--- este import era el que faltaba
 
 object RetrofitInstance {
     private const val BASE_URL = "http://10.0.2.2:8080" // localhost del emulador

@@ -7,7 +7,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.shareflow.app.screens.SplashScreen
 import com.shareflow.app.screens.LoginRegisterScreen
-
+import com.shareflow.app.screens.RegisterScreen
+import com.shareflow.app.screens.LoginScreen
+import com.shareflow.app.screens.ForgotPasswordScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController = rememberNavController()) {
@@ -18,8 +20,15 @@ fun NavigationGraph(navController: NavHostController = rememberNavController()) 
         composable("loginRegisterScreen") {
             LoginRegisterScreen(navController)
         }
-
-
+        composable("registerScreen") {
+            RegisterScreen(navController)
+        }
+        composable("loginScreen") {
+            LoginScreen(navController)
+        }
+        composable("forgotPasswordScreen") {
+            ForgotPasswordScreen(navController)
+        }
 
 
     }
